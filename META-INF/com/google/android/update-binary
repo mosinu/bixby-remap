@@ -105,7 +105,7 @@ rm -rf $MODPATH 2>/dev/null
 mkdir -p $MODPATH
 
 # Extract files to system. Use your own method if needed
-ui_print "- Extracting module files"
+ui_print "- Extracting module files..."
 unzip -o "$ZIP" 'system/*' -d $MODPATH >&2
 
 # Remove placeholder
@@ -136,7 +136,45 @@ $POSTFSDATA && cp -af $INSTALLER/common/post-fs-data.sh $MODPATH/post-fs-data.sh
 # service mode scripts
 $LATESTARTSERVICE && cp -af $INSTALLER/common/service.sh $MODPATH/service.sh
 
-ui_print "- Setting permissions"
+ui_print "- Configuring Bixby button..."
+ui_print ""
+ui_print "Make a choice from the following functions:"
+ui_print ""
+ui_print "Camera (CAMERA)"
+ui_print "Screenshot (SYSRQ)"
+ui_print "Google Search (SEARCH)"
+ui_print "Google Voice (VOICE_ASSIST)"
+ui_print "Call (CALL)"
+ui_print "Contacts (CONTACTS)"
+ui_print "Music Player (MUSIC)"
+ui_print "Mute/Unmute Media Volume (VOLUME_MUTE)"
+ui_print "Play/Pause Media (MEDIA_PLAY_PAUSE)"
+ui_print "Next Media (MEDIA_NEXT)"
+ui_print "Recent Apps (APP_SWITCH)"
+ui_print "Open/Close Quick Settings (QPANEL_ON_OFF)"
+ui_print "Internet Browser (EXPLORER)"
+ui_print "Calendar (CALENDAR)"
+ui_print "Calculator (CALCULATOR)"
+ui_print ""
+ui_print "Use the hardware buttons to make a selection."
+ui_print ""
+
+q_and_a CAMERA SYSRQ Other
+[ -z "$CHOICE" ] && q_and_a SEARCH VOICE_ASSIST Other
+[ -z "$CHOICE" ] && q_and_a CALL CONTACTS Other
+[ -z "$CHOICE" ] && q_and_a MUSIC VOLUME_MUTE Other
+[ -z "$CHOICE" ] && q_and_a MEDIA_PLAY_PAUSE MEDIA_NEXT Other
+[ -z "$CHOICE" ] && q_and_a APP_SWITCH QPANEL_ON_OFF Other
+[ -z "$CHOICE" ] && q_and_a EXPLORER CALENDAR Other
+[ -z "$CHOICE" ] && q_and_a CALCULATOR Other
+if [ -z "$CHOICE" ]; then
+  ui_print "- No choice made. Using CAMERA."
+  CHOICE=CAMERA
+fi
+
+sed -i -re 's/(key 703 +)[A-Z]+$/\1'$CHOICE'/' $MODPATH/system/usr/keylayout/Generic.kl
+
+ui_print "- Setting permissions."
 set_permissions
 
 ##########################################################################################

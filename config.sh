@@ -98,3 +98,51 @@ set_permissions() {
   # set_perm  $MODPATH/system/bin/dex2oat         0       2000    0755         u:object_r:dex2oat_exec:s0
   # set_perm  $MODPATH/system/lib/libart.so       0       0       0644
 }
+
+get_key() {
+  local key=$( LD_LIBRARY_PATH=/system/lib64 \
+	       /system/bin/getevent -lqc 1  | awk '{ print $(NF-1) }' )
+  [ $key = 02bf ] && key=KEY_BIXBY
+
+  echo $key
+}
+
+q_and_a() {
+  local choice1="     [Vol Up]   = $1"
+  local choice2="     [Vol Down] = $2"
+  local choice3="     [Bixby]    = $3"
+
+  ui_print " - Which function?"
+  ui_print "$choice1"
+  ui_print "$choice2"
+  [ -n "$3" ] && ui_print "$choice3"
+
+  local n=99
+  until [ $n -le $# ]; do
+    unset UP DOWN BIXBY
+    local a=$(get_key)
+
+    case $a in
+      *UP)
+        UP=true
+        n=1
+        ;;
+      *DOWN)
+        DOWN=true
+        n=2
+        ;;
+      *BIXBY)
+        BIXBY=true
+        n=3
+        ;;
+      *)
+	n=99
+        ;;
+    esac
+
+  done
+
+  CHOICE=$(eval echo '$'$n)
+  ui_print ""
+  [ $CHOICE = Other ] && unset CHOICE
+}
