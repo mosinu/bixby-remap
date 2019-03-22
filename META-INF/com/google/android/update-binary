@@ -172,7 +172,25 @@ if [ -z "$CHOICE" ]; then
   CHOICE=CAMERA
 fi
 
-sed -i -re 's/(key 703 +)[A-Z]+$/\1'$CHOICE'/' $MODPATH/system/usr/keylayout/Generic.kl
+bl=$(getprop ro.boot.bootloader)
+
+# Device is either 4 or 5 characters long, depending on length of bootloader
+# string.
+#
+device=${bl:0:$((${#bl} - 8))}
+
+kl=/system/usr/keylayout/Generic.kl
+kl_s10=$kl.g97x
+
+# Select the right keyboard layout for this device.
+#
+if ( [ $device = G975F ] || [ $device = G973F ] || [ $device = G970F ]); then
+  mv $MODPATH$kl_s10 $MODPATH$kl
+else
+  rm $MODPATH$kl_s10
+fi
+
+sed -i -re 's/(key 703 +)[A-Z]+$/\1'$CHOICE'/' $MODPATH$kl
 
 ui_print "- Setting permissions."
 set_permissions

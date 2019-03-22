@@ -1,7 +1,7 @@
 id=bixby-remap
 name=Bixby button remapper
-version=v2.0
-versionCode=20
+version=v2.1
+versionCode=21
 author=ianmacd
-description=Remaps Bixby button on Samsung S8/S8+/S9/S9+ to 1 of 15 functions.
+description=Remaps Bixby button on Samsung S8/S8+/S9/S9+/S10e/S10/S10+ to 1 of 15 functions.
 minMagisk=1500
