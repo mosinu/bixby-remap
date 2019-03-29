@@ -33,6 +33,10 @@ module and reboot.
 
 ## Changelog
 
+2019-03-29: v2.2
+
+- Updated for Magisk v19 template format.
+
 2019-03-22: v2.1
 
 - Support for the Samsung Galaxy S10e/S10/S10+ (G970F/G973F/G975F).
