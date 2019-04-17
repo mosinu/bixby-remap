@@ -171,24 +171,15 @@ on_install() {
     CHOICE=CAMERA
   fi
   
-  bl=$(getprop ro.boot.bootloader)
-  
-  # Device is either 4 or 5 characters long, depending on length of bootloader
-  # string.
-  #
-  device=${bl:0:$((${#bl} - 8))}
-  
+  mirror=/sbin/.magisk/mirror
   kl=/system/usr/keylayout/Generic.kl
-  kl_s10=$kl.g97x
+
+  [ -f $mirror$kl ] || exit 1
   
-  # Select the right keyboard layout for this device.
+  # Remap Bixby button.
   #
-  if ( [ $device = G975F ] || [ $device = G973F ] || [ $device = G970F ]); then
-    mv $MODPATH$kl_s10 $MODPATH$kl
-  else
-    rm $MODPATH$kl_s10
-  fi
-  
+  mkdir -p $MODPATH${kl%/*}
+  cp -p $mirror$kl $MODPATH$kl
   sed -i -re 's/(key 703 +)[A-Z]+$/\1'$CHOICE'/' $MODPATH$kl
 }
 
@@ -254,5 +245,5 @@ q_and_a() {
 
   CHOICE=$(eval echo '$'$n)
   ui_print ""
-  [ $CHOICE = Other ] && unset CHOICE
+  [ "$CHOICE" = Other ] && unset CHOICE
 }

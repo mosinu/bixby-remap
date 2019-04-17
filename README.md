@@ -2,9 +2,9 @@
 
 ## Description
 
-This Magisk module allows you to remap the dedicated Bixby hardware button of
-the Samsung Galaxy S8/S8+ (G950F/G955F), S9/S9+ (G960F/G965F) and
-S10e/S10/S10+ (G970F/G973F/G975F) to any one of 15 user-selectable functions.
+This Magisk module allows ther user to remap the Bixby hardware button of the
+Samsung Galaxy S8/S8+ (G950F/G955F), S9/S9+ (G960F/G965F) and S10e/S10/S10+
+(G970F/G973F/G975F) to any one of 15 user-selectable functions.
 
 The following functions are selectable during installation, using the hardware
 keys of the phone:
@@ -32,6 +32,13 @@ To restore the default Bixby behaviour, simply deactivate or uninstall the
 module and reboot.
 
 ## Changelog
+
+2019-04-17: v2.3
+
+- Rather than including a replacement keyboard layout file, we now dynamically
+  modify a copy of the device's actual file. This way, the file will always be
+  up to date and not subject to minor differences between devices and Android
+  OS version.
 
 2019-03-29: v2.2
 
